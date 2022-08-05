@@ -2,6 +2,7 @@ package com.tom.springbootmall.service.impl;
 
 import com.tom.springbootmall.dao.impl.ProductDaoImpl;
 import com.tom.springbootmall.dao.productDao;
+import com.tom.springbootmall.dto.ProductRequest;
 import com.tom.springbootmall.model.Product;
 import com.tom.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,4 +20,12 @@ public class ProductServiceImpl implements ProductService {
 
         return product;
     }
+
+    @Override
+    public Integer createProduct(ProductRequest productRequest) {
+
+        return  productDao.createProduct(productRequest);
+    }
+
+
 }
