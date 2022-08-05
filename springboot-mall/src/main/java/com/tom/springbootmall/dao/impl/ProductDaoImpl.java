@@ -43,16 +43,18 @@ public class ProductDaoImpl implements productDao {
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
-        String sql="INSERT INTO product(product_name,category,image_url,price,stock,description,created_date,last_modified_date)" +
+        String sql="INSERT INTO product(product_name,category,image_url,price,stock,description," +
+                "created_date,last_modified_date)" +
                 "VALUE(:productName,:category,:imageUrl,:price,:stock,:description,:created_date,:last_modified_date) ";
         Map<String,Object> map=new HashMap<>();
         map.put("productName",productRequest.getProductName());
-        map.put("category",productRequest.getCategory());
+        map.put("category",productRequest.getCategory().toString());//?
         map.put("imageUrl",productRequest.getImageUrl());
         map.put("price",productRequest.getPrice());
         map.put("stock",productRequest.getStock());
         map.put("description",productRequest.getDescription());
 
+        //創建當下時間，當作商品創建時間&修改時間
         Date now=new Date();
         map.put("created_date",now);
         map.put("last_modified_date",now);
@@ -60,7 +62,7 @@ public class ProductDaoImpl implements productDao {
         KeyHolder keyHolder=new GeneratedKeyHolder();
 
         //下面這端程式為何?
-        npjt.update(sql,new MapSqlParameterSource(),keyHolder);
+        npjt.update(sql,new MapSqlParameterSource(map),keyHolder);
         Integer productId=keyHolder.getKey().intValue();
 
         return productId;

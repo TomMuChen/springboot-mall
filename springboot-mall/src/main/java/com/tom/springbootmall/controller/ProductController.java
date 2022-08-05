@@ -31,6 +31,7 @@ public class ProductController {
     //ProductRequest特別新增了
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest){
+        //呼叫service層並傳入json資料{productRequest}
         Integer  productId=productService.createProduct(productRequest);
         Product product=productService.getProductById(productId);
         return ResponseEntity.status(HttpStatus.CREATED)
