@@ -1,4 +1,4 @@
-package com.tom.springbootmall.rawMapper;
+package com.tom.springbootmall.rowMapper;
 
 import com.tom.springbootmall.constant.ProductCategory;
 import com.tom.springbootmall.model.Product;
