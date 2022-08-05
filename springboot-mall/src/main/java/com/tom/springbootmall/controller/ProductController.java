@@ -56,4 +56,14 @@ public class ProductController {
                 .body(updatedProduct);
     }
 
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId ){
+        productService.deleteProductById(productId);
+
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+        //這邊的Response 返回方法怎麼用的?
+    }
+
 }
