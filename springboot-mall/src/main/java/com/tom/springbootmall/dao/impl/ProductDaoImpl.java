@@ -2,6 +2,7 @@ package com.tom.springbootmall.dao.impl;
 
 import com.tom.springbootmall.constant.ProductCategory;
 import com.tom.springbootmall.dao.productDao;
+import com.tom.springbootmall.dto.ProductQueryParams;
 import com.tom.springbootmall.dto.ProductRequest;
 import com.tom.springbootmall.model.Product;
 import com.tom.springbootmall.rowMapper.ProductRowMapper;
@@ -25,20 +26,20 @@ public class ProductDaoImpl implements productDao {
 
 
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
         String sql="SELECT product_id,product_name,category,image_url,price,stock,description," +
                 "created_date,last_modified_date " +
                 "FROM product WHERE 1=1";
         Map<String,Object> map=new HashMap<>();
 
-        if (category!=null){
+        if (productQueryParams.getCategory()!=null){
             sql=sql+" AND category=:category";
-            map.put("category",category.name());//這裡要做轉型
+            map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
         }
 
-        if (search!=null){
+        if (productQueryParams.getSearch()!=null){
             sql=sql+" AND product_name LIKE :search";
-            map.put("search","%"+search+"%");//表 %[蘋果% 只要包含蘋果的都要列出
+            map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
         }
 
         ProductRowMapper pr=new ProductRowMapper();
