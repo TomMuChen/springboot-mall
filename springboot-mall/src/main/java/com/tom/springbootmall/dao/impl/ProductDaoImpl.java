@@ -42,6 +42,14 @@ public class ProductDaoImpl implements productDao {
             map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
         }
 
+
+        sql=sql+" ORDER BY "+productQueryParams.getOrderBy()+" "+productQueryParams.getSort();
+        //JDBC中無法用下列方式寫SQL語法  要注意
+//        sql=sql+" ORDER BY :orderBy :sort";
+//        map.put("orderBy",productQueryParams.getOrderBy());
+//        map.put("sort",productQueryParams.getSort());
+
+
         ProductRowMapper pr=new ProductRowMapper();
         List<Product> productList=npjt.query(sql,map,pr);
         return productList;

@@ -21,13 +21,21 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
+            //查詢條件 Filtering
             @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required=false)String search){
+            @RequestParam(required=false)String search,
 
-        //參數統一管理
+            //排序 sort
+            @RequestParam(defaultValue = "created_date")String orderBy,// 當使用者未輸入，則預設為"created_date" 欄位
+            @RequestParam(defaultValue = "desc")String sort //降序排序(由高到低)
+    ){
+
+        //參數統一管理，在Controll層直接輸入前端傳來的參數，service dao層皆可收到，提高維護性
         ProductQueryParams productQueryParams=new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
+        productQueryParams.setOrderBy(orderBy);
+        productQueryParams.setSort(sort);
 
         List<Product> productList=productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
