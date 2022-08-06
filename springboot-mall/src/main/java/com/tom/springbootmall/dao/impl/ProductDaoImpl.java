@@ -32,20 +32,25 @@ public class ProductDaoImpl implements productDao {
         Map<String,Object> map=new HashMap<>();
 
         /*** 查詢條件*/
+
         //運用拼接方式設置SQL 語法
-        if (productQueryParams.getCategory()!=null){
-            sql=sql+" AND category=:category";
-            map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
-        }
-        if (productQueryParams.getSearch()!=null){
-            sql=sql+" AND product_name LIKE :search";
-            map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
-        }
+        sql=addFilteringSql(sql,map,productQueryParams);
+        //這段被替代
+//        if (productQueryParams.getCategory()!=null){
+//            sql=sql+" AND category=:category";
+//            map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
+//        }
+//        if (productQueryParams.getSearch()!=null){
+//            sql=sql+" AND product_name LIKE :search";
+//            map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
+//        }
 
         Integer total=npjt.queryForObject(sql,map,Integer.class);//將SQL中COUNT值轉成Integer返回
         return total;
     }
 
+
+    /***取得查詢商品列表*/
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
 
@@ -57,14 +62,17 @@ public class ProductDaoImpl implements productDao {
 
         /*** 查詢條件*/
         //運用拼接方式設置SQL 語法
-        if (productQueryParams.getCategory()!=null){
-            sql=sql+" AND category=:category";
-            map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
-        }
-        if (productQueryParams.getSearch()!=null){
-            sql=sql+" AND product_name LIKE :search";
-            map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
-        }
+
+        sql=addFilteringSql(sql,map,productQueryParams);
+        //這段被替代
+//        if (productQueryParams.getCategory()!=null){
+//            sql=sql+" AND category=:category";
+//            map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
+//        }
+//        if (productQueryParams.getSearch()!=null){
+//            sql=sql+" AND product_name LIKE :search";
+//            map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
+//        }
 
         /*** 排序*/
         sql=sql+" ORDER BY "+productQueryParams.getOrderBy()+" "+productQueryParams.getSort();
@@ -86,6 +94,7 @@ public class ProductDaoImpl implements productDao {
 
     }
 
+    /***以商品ID查詢商品*/
     @Override
     public Product getProductById(Integer productId) {
         String sql="SELECT product_id,product_name,category,image_url,price,stock,description," +
@@ -154,6 +163,19 @@ public class ProductDaoImpl implements productDao {
         Map<String,Object> map=new HashMap<>();
         map.put("productId",productId);
         npjt.update(sql,map);
+    }
+
+
+    private String addFilteringSql(String sql, Map<String,Object> map,ProductQueryParams productQueryParams){
+        if (productQueryParams.getCategory()!=null){
+            sql=sql+" AND category=:category";
+            map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
+        }
+        if (productQueryParams.getSearch()!=null){
+            sql=sql+" AND product_name LIKE :search";
+            map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
+        }
+        return sql;
     }
 
 }

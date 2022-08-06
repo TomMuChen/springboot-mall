@@ -49,7 +49,7 @@ public class ProductController {
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
 
-        //取得productList
+        //取得productList  //亦可直接以List 型式版回前端
         List<Product> productList=productService.getProducts(productQueryParams);
 
 
@@ -58,7 +58,7 @@ public class ProductController {
         Integer total=productService.countProduct(productQueryParams);
 
         //分頁
-        //將查詢結果從新打包回傳前端
+        //將查詢結果從新打包(以物件型態打包)回傳前端
         Page page=new Page<Product>();
         page.setLimit(limit);
         page.setOffset(offset);
