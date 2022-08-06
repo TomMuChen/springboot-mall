@@ -27,27 +27,36 @@ public class ProductDaoImpl implements productDao {
 
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
+
+        //設置SQL語法
         String sql="SELECT product_id,product_name,category,image_url,price,stock,description," +
                 "created_date,last_modified_date " +
                 "FROM product WHERE 1=1";
         Map<String,Object> map=new HashMap<>();
 
+        /*** 查詢條件*/
+        //運用拼接方式設置SQL 語法
         if (productQueryParams.getCategory()!=null){
             sql=sql+" AND category=:category";
             map.put("category",productQueryParams.getCategory().name());//這裡要做轉型
         }
-
         if (productQueryParams.getSearch()!=null){
             sql=sql+" AND product_name LIKE :search";
             map.put("search","%"+productQueryParams.getSearch()+"%");//表 %[蘋果% 只要包含蘋果的都要列出
         }
 
-
+        /*** 排序*/
         sql=sql+" ORDER BY "+productQueryParams.getOrderBy()+" "+productQueryParams.getSort();
         //JDBC中無法用下列方式寫SQL語法  要注意
-//        sql=sql+" ORDER BY :orderBy :sort";
-//        map.put("orderBy",productQueryParams.getOrderBy());
-//        map.put("sort",productQueryParams.getSort());
+        //sql=sql+" ORDER BY :orderBy :sort";
+        //map.put("orderBy",productQueryParams.getOrderBy());
+        //  map.put("sort",productQueryParams.getSort());
+
+        /*** 分頁*/
+        //不用設置if null的原因:因在controller已設置了defaultValue，故即便前端沒資料也有預設的資料
+        sql=sql+" LIMIT :limit OFFSET :offset";
+        map.put("limit",productQueryParams.getLimit());
+        map.put("offset",productQueryParams.getOffset());
 
 
         ProductRowMapper pr=new ProductRowMapper();
