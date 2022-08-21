@@ -1,7 +1,6 @@
 package com.tom.springbootmall.dao.impl;
 
-import com.tom.springbootmall.constant.ProductCategory;
-import com.tom.springbootmall.dao.productDao;
+import com.tom.springbootmall.dao.ProductDao;
 import com.tom.springbootmall.dto.ProductQueryParams;
 import com.tom.springbootmall.dto.ProductRequest;
 import com.tom.springbootmall.model.Product;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ProductDaoImpl implements productDao {
+public class ProductDaoImpl implements ProductDao {
 
     @Autowired
     private NamedParameterJdbcTemplate npjt;

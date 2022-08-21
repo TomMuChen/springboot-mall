@@ -1,7 +1,6 @@
 package com.tom.springbootmall.service.impl;
 
-import com.tom.springbootmall.constant.ProductCategory;
-import com.tom.springbootmall.dao.productDao;
+import com.tom.springbootmall.dao.ProductDao;
 import com.tom.springbootmall.dto.ProductQueryParams;
 import com.tom.springbootmall.dto.ProductRequest;
 import com.tom.springbootmall.model.Product;
@@ -15,7 +14,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private productDao productDao;
+    private ProductDao productDao;
 
 
     @Override

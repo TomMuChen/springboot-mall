@@ -1,6 +1,5 @@
 package com.tom.springbootmall.dao;
 
-import com.tom.springbootmall.constant.ProductCategory;
 import com.tom.springbootmall.dto.ProductQueryParams;
 import com.tom.springbootmall.dto.ProductRequest;
 import com.tom.springbootmall.model.Product;
@@ -8,7 +7,7 @@ import com.tom.springbootmall.model.Product;
 import java.util.List;
 
 
-public interface productDao {
+public interface ProductDao {
 
      Integer countProduct(ProductQueryParams productQueryParams);
 
