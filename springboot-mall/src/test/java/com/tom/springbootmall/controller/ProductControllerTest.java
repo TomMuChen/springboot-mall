@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc; //模擬前端
 
     ObjectMapper objectMapper=new ObjectMapper();
     Logger log= LoggerFactory.getLogger(ProductControllerTest.class);
