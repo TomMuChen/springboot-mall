@@ -5,6 +5,8 @@ import com.tom.springbootmall.dto.ProductQueryParams;
 import com.tom.springbootmall.dto.ProductRequest;
 import com.tom.springbootmall.model.Product;
 import com.tom.springbootmall.rowMapper.ProductRowMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -19,7 +21,7 @@ import java.util.Map;
 
 @Component
 public class ProductDaoImpl implements ProductDao {
-
+    public static final Logger log= LoggerFactory.getLogger(ProductDaoImpl.class);
     @Autowired
     private NamedParameterJdbcTemplate npjt;
 
@@ -159,12 +161,15 @@ public class ProductDaoImpl implements ProductDao {
     //用於更新產品庫存
     @Override
     public void updateStock(Integer productId, Integer stock) {
-        String sql="UPDATE product SET  stock=:stock,last_modified_date=:lastModifiedDate WHERE product_id=:productId ";
+
+        String sql="UPDATE product " +
+                " SET stock=:stock,last_modified_date=:lastModifiedDate " +
+                " WHERE product_id=:productId ";
         Map<String,Object> map=new HashMap<>();
         map.put("productId",productId); //這邊要注意 篩選值也要放到MAP
         map.put("stock",stock); //這邊要注意 篩選值也要放到MAP
-        map.put("last_modified_date",new Date());
-
+        map.put("lastModifiedDate",new Date());
+        log.info("扣除商品庫存: 餘{}",stock);
         npjt.update(sql,map);
 
     }

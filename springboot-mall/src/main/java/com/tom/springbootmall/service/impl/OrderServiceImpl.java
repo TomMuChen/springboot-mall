@@ -43,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order getOrderById(Integer orderId) {
+        log.info("取得編號為 {} 的訂單",orderId);
         Order order=orderDao.getOrderById(orderId);
 
         //把訂單所有品項置入
@@ -60,32 +61,32 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
-//-------------------------
-//        //創建訂單前，先檢查user是否存在，若不存在拋出exception
-//        User user=userDao.getUserById(userId);
-//        if (user==null){
-//            log.info("該userId:{} 不存在",userId);
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//        }
-//-------------------------
+
+        //創建訂單前，先檢查user是否存在，若不存在拋出exception
+        User user=userDao.getUserById(userId);
+        if (user==null){
+            log.info("該userId:{} 不存在",userId);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         //從前端回傳的資料，篩出需要的資訊
         int totalAmount=0;
         List<BuyItem> buyItemList=createOrderRequest.getBuyItemList();
         List<OrderItem> orderItemList=new ArrayList<>();
         for (BuyItem item :buyItemList){ //逐個篩出商品細項
             Product product=productDao.getProductById(item.getProductId());
-//-------------------------
-            //檢查商品2個地方 #商品是否存在 #商品次存是否足夠
-            //當滿足兩條件時，才能成立訂單
-//            if (product==null){
-//                log.info("商品{}不存在",item.getProductId());
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//            } else if (product.getStock()<item.getQuantity()) {
-//                log.info("商品{}庫存數量不足，無法購買。剩餘庫存:{}，欲購買數量:{}",item.getProductId(),product.getStock(),item.getQuantity());
-//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-//            }
-//            productDao.updateStock(product.getProductId(),product.getStock()-item.getQuantity());
- //-------------------------
+
+//            檢查商品2個地方 #商品是否存在 #商品次存是否足夠
+//            當滿足兩條件時，才能成立訂單
+            if (product==null){
+                log.info("商品{}不存在",item.getProductId());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            } else if (product.getStock()<item.getQuantity()) {
+                log.info("商品{}庫存數量不足，無法購買。剩餘庫存:{}，欲購買數量:{}",item.getProductId(),product.getStock(),item.getQuantity());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            productDao.updateStock(product.getProductId(),product.getStock()-item.getQuantity());
+
             //取得訂單總價格
             int amount=product.getPrice()*item.getQuantity();
             totalAmount+=amount;
