@@ -156,6 +156,19 @@ public class ProductDaoImpl implements ProductDao {
 
     }
 
+    //用於更新產品庫存
+    @Override
+    public void updateStock(Integer productId, Integer stock) {
+        String sql="UPDATE product SET  stock=:stock,last_modified_date=:lastModifiedDate WHERE product_id=:productId ";
+        Map<String,Object> map=new HashMap<>();
+        map.put("productId",productId); //這邊要注意 篩選值也要放到MAP
+        map.put("stock",stock); //這邊要注意 篩選值也要放到MAP
+        map.put("last_modified_date",new Date());
+
+        npjt.update(sql,map);
+
+    }
+
     @Override
     public void deleteProductById(Integer productId) {
         String sql="DELETE FROM product WHERE product_id=:productId ";

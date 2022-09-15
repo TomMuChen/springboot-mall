@@ -2,14 +2,12 @@ package com.tom.springbootmall.controller;
 
 
 import com.tom.springbootmall.dto.CreateOrderRequest;
+import com.tom.springbootmall.model.Order;
 import com.tom.springbootmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,8 +25,19 @@ public class OrderController {
         //先寫問號，後面才回來改
        Integer orderId= orderService.createOrder(userId,createOrderRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
+       //這邊的order應包含細項
+       Order order=orderService.getOrderById(orderId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
+
+    //Test
+    @GetMapping("/getorder/{orderId}")
+    public ResponseEntity<Order> getorder(@PathVariable Integer orderId ){
+       Order order= orderService.getOrderById(orderId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(order);
+    }
 
 }
