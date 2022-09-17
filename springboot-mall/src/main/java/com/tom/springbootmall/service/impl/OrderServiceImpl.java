@@ -6,6 +6,7 @@ import com.tom.springbootmall.dao.ProductDao;
 import com.tom.springbootmall.dao.UserDao;
 import com.tom.springbootmall.dto.BuyItem;
 import com.tom.springbootmall.dto.CreateOrderRequest;
+import com.tom.springbootmall.dto.OrderQueryParams;
 import com.tom.springbootmall.model.Order;
 import com.tom.springbootmall.model.OrderItem;
 import com.tom.springbootmall.model.Product;
@@ -35,6 +36,25 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UserDao userDao;
 
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+
+        List<Order>orderList=orderDao.getOrders(orderQueryParams);
+
+        for (Order order:orderList){
+            List<OrderItem> orderItemList=orderDao.getOrderItemsByOrderId(order.getOrderId());
+            order.setOrderItemList(orderItemList);
+        }
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+
+
 
     /**
      * 取得訂單
@@ -47,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
         Order order=orderDao.getOrderById(orderId);
 
         //把訂單所有品項置入
-        List<OrderItem>orderItemList=orderDao.getOrderItemsById(orderId);
+        List<OrderItem>orderItemList=orderDao.getOrderItemsByOrderId(orderId);
         order.setOrderItemList(orderItemList);
         return order;
     }
@@ -106,4 +126,6 @@ public class OrderServiceImpl implements OrderService {
 
         return orderId;
     }
+
+
 }
